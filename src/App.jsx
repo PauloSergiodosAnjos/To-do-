@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react"
+import "./app.scss";
+import verifyBtn from "./assets/verificar.png"
+import editBtn from "./assets/editar (1).png"
+import trashBtn from "./assets/lixeira.png"
 
 export default function App() {
 
@@ -8,7 +12,7 @@ export default function App() {
   useEffect(()=> {
     fetchTask()
     fetchType()
-  })
+  }, [])
 
 
   const fetchTask = async ()=> {
@@ -38,14 +42,19 @@ export default function App() {
       <div>
         {type.map((item, i)=>{
           return(
-            <div key={i}>
+            <div key={i} className="card">
               <h2>{item.type}</h2>
               <hr />
                 {task.map((item, i)=>{
                   return(
-                    <ul key={i}>
-                      <li>{item.title}</li>
-                    </ul>
+                      <ul className="list">
+                        <li>{item.title}</li>
+                        <div className="buttons">
+                          <img src={verifyBtn} alt="verificar" />
+                          <img src={editBtn} alt="editar" />
+                          <img src={trashBtn} alt="apagar" />
+                        </div>
+                      </ul>
                   )
                 })}
             </div>

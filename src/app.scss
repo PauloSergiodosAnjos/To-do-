@@ -1,0 +1,27 @@
+@import "./variables.scss";
+
+.card {
+    width: $card-width;
+    box-shadow: $card-shadow;
+    background-color: $card-background;
+    padding: $card-padding;
+    gap: $card-gap;
+    @include centerCard(column);
+    border-radius: 0.70rem;
+}
+
+.list {
+    @include listCenter();
+    
+    img {
+        width: 1.3rem;
+        height: 1.2rem;
+        cursor: pointer;
+    }
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}

@@ -1,0 +1,18 @@
+$card-width: 15rem;
+$card-background: rgb(255, 255, 255);
+$card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$card-padding: 1rem;
+$card-gap: 0.75rem;
+
+@mixin centerCard($direction) {
+    display: flex;
+    flex-direction: $direction;
+    text-align: center;
+}
+
+@mixin listCenter() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
