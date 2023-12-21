@@ -3,6 +3,7 @@ import "./app.scss";
 import verifyBtn from "./assets/verificar.png"
 import editBtn from "./assets/editar (1).png"
 import trashBtn from "./assets/lixeira.png"
+import Form from "./components/Form/Form";
 
 export default function App() {
 
@@ -23,6 +24,7 @@ export default function App() {
       setTask(dataTask)
     } catch (error) {
       <h2>Houve um erro ao buscar as tasks</h2>
+      console.log(error);
     }
   }
 
@@ -34,12 +36,14 @@ export default function App() {
       setType(dataType)
     } catch (error) {
       <h2>Houve um erro ao buscar os tipos</h2>
+      console.log(error);
     }
   }
 
   return(
     <>
       <div>
+        <Form/>
         {type.map((item, i)=>{
           return(
             <div key={i} className="card">
@@ -64,3 +68,5 @@ export default function App() {
     </>
   )
 }
+
+//a fazer: função CRUD e armazenamento local, depois cuida do front
