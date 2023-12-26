@@ -8,11 +8,25 @@ import Form from "./components/Form/Form";
 export default function App() {
 
   const [tasksByType, setTasksByType] = useState({})
+  const [taskType, setTaskType] = useState("")
+  const [taskname, setTaskName] = useState("")
 
   useEffect(()=> {
     fetchTask()
   }, [])
 
+  const handleTask = (ev)=> {
+    setTaskType(ev.target.value)
+  }
+
+  const handleType = (ev)=> {
+    setTaskName(ev.target.value)
+  }
+
+  const saveTask = (ev)=> {
+    ev.preventDefault()
+    console.log({taskname, taskType});
+  }
 
   const fetchTask = async ()=> {
     try {
@@ -43,7 +57,7 @@ export default function App() {
   return(
     <>
       <div>
-        <Form/>
+        <Form handleTask={handleTask} handleType={handleType} saveTask={saveTask}/>
         {Object.keys(tasksByType).map((type, i)=>{
           return(
             <div key={i} className="card">
