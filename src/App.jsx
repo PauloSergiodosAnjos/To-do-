@@ -7,36 +7,36 @@ import Form from "./components/Form/Form";
 
 export default function App() {
 
-  const [task, setTask] = useState([])
-  const [type, setType] = useState([])
+  const [tasksByType, setTasksByType] = useState({})
 
   useEffect(()=> {
     fetchTask()
-    fetchType()
   }, [])
 
 
   const fetchTask = async ()=> {
     try {
-      const url = "http://localhost:3000/tasks"
-      const response = await fetch(url)
-      const dataTask = await response.json()
-      setTask(dataTask)
+      const urlTask = "http://localhost:3000/tasks"
+      const responseTask = await fetch(urlTask)
+      const dataTask = await responseTask.json()
+
+      const urltype = "http://localhost:3000/types"
+      const responseType = await fetch(urltype)
+      const dataType = await responseType.json()
+
+      const tasksByType = {}
+
+      dataType.forEach((type)=> {
+        tasksByType[type.type] = dataTask.filter((task)=> {
+          return task.id === type.id
+        })
+      })
+
+      setTasksByType(tasksByType)
+
     } catch (error) {
       <h2>Houve um erro ao buscar as tasks</h2>
-      console.log(error);
-    }
-  }
-
-  const fetchType = async ()=> {
-    try {
-      const url = "http://localhost:3000/types"
-      const response = await fetch(url)
-      const dataType = await response.json()
-      setType(dataType)
-    } catch (error) {
-      <h2>Houve um erro ao buscar os tipos</h2>
-      console.log(error);
+      console.error("Houve um erro ao buscar tasks e types", error);
     }
   }
 
@@ -44,23 +44,25 @@ export default function App() {
     <>
       <div>
         <Form/>
-        {type.map((item, i)=>{
+        {Object.keys(tasksByType).map((type, i)=>{
           return(
             <div key={i} className="card">
-              <h2>{item.type}</h2>
+              <h2>{type}</h2>
               <hr />
-                {task.map((item, i)=>{
+              <ul className="list">
+                {tasksByType[type].map((task, j)=>{
                   return(
-                      <ul className="list">
-                        <li>{item.title}</li>
-                        <div className="buttons">
-                          <img src={verifyBtn} alt="verificar" />
-                          <img src={editBtn} alt="editar" />
-                          <img src={trashBtn} alt="apagar" />
-                        </div>
-                      </ul>
-                  )
-                })}
+                        <li key={j}>
+                          {task.title}
+                            <div className="buttons">
+                              <img src={verifyBtn} alt="verificar" />
+                              <img src={editBtn} alt="editar" />
+                              <img src={trashBtn} alt="apagar" />
+                            </div>
+                        </li>
+                          )
+                        })}
+              </ul>
             </div>
           )
         })}
