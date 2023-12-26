@@ -28,7 +28,7 @@ export default function App() {
 
       dataType.forEach((type)=> {
         tasksByType[type.type] = dataTask.filter((task)=> {
-          return task.id === type.id
+          return task.typeId === type.id
         })
       })
 

@@ -1,8 +1,14 @@
 {
     "tasks": [
-        {"id": 1, "title": "Fazer relatório"}
+        {"id": 1, "title": "Fazer relatório", "typeId": 1},
+        {"id": 2, "title": "Cagar", "typeId": 2},
+        {"id": 3, "title": "Estudar", "typeId": 3},
+        {"id": 4, "title": "cadastro no sistema", "typeId": 1},
+        {"id": 5, "title": "Limpar a casa", "typeId": 2}
     ],
     "types": [
-        {"id": 1, "type": "Trabalho"}
+        {"id": 1, "type": "Trabalho"},
+        {"id": 2, "type": "Casa"},
+        {"id": 3, "type": "Estudo"}
     ]
 }
