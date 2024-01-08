@@ -8,24 +8,17 @@ import Form from "./components/Form/Form";
 export default function App() {
 
   const [tasksByType, setTasksByType] = useState({})
+  const [taskData, setTaskData] = useState([])
+  const [typeData, setTypeData] = useState([])
   const [taskType, setTaskType] = useState("")
-  const [taskname, setTaskName] = useState("")
+  const [taskName, setTaskName] = useState("")
 
   useEffect(()=> {
     fetchTask()
-  }, [])
+  }, [taskData, typeData])
 
   const handleTask = (ev)=> {
     setTaskType(ev.target.value)
-  }
-
-  const handleType = (ev)=> {
-    setTaskName(ev.target.value)
-  }
-
-  const saveTask = (ev)=> {
-    ev.preventDefault()
-    console.log({taskname, taskType});
   }
 
   const fetchTask = async ()=> {
@@ -33,17 +26,26 @@ export default function App() {
       const urlTask = "http://localhost:3000/tasks"
       const responseTask = await fetch(urlTask)
       const dataTask = await responseTask.json()
+      //verificacao se o valor do dataTask for diferente do taskData, ele chama a funcao setTaskData e armazena a dataTask na variavel, caso for igual, nao faz nada, evitando chamadas desnecessarias, pois o react considera uma mudanca de estado chamar a funcao setTaskData ou setTypeData, assim acionando o useEffect infinitamente e nao quando ha de fato uma mudanca 
+      if (JSON.stringify(dataTask) !== JSON.stringify(taskData)) {
+        setTaskData(dataTask)
+      }
 
       const urltype = "http://localhost:3000/types"
       const responseType = await fetch(urltype)
       const dataType = await responseType.json()
+      if (JSON.stringify(dataType) !== JSON.stringify(typeData)) {
+        setTypeData(dataType)
+      }
 
       const tasksByType = {}
 
-      dataType.forEach((type)=> {
-        tasksByType[type.type] = dataTask.filter((task)=> {
+      //funcao para criar uma chave no meu objeto {tasksByType} com o nome do tipo que esta sendo iterado no momento, e a chave vai ter o valor do resultado do filter do dataTask. Caso a condicao de o task.typeId === type.id seja true, ira retornar o objeto que esta sendo iterado no momento atual, virando o valor da chave. Caso retorne false, segue para a outra task
+      typeData.forEach((type)=> {
+        tasksByType[type.type] = taskData.filter((task)=> {
           return task.typeId === type.id
         })
+        //fazer logica para criar novas tarefas com type.id pra cada uma e os typeId das tasks baterem
       })
 
       setTasksByType(tasksByType)
@@ -53,17 +55,29 @@ export default function App() {
       console.error("Houve um erro ao buscar tasks e types", error);
     }
   }
+  
+  const handleType = (ev)=> {
+    setTaskName(ev.target.value)
+  }
+
+  const saveTask = (ev)=> {
+    ev.preventDefault()
+    console.log({taskName, taskType});
+  }
+
 
   return(
     <>
       <div>
         <Form handleTask={handleTask} handleType={handleType} saveTask={saveTask}/>
+        {/*Object.keys() retorna um array com os nomes das propriedades do objeto*/}
         {Object.keys(tasksByType).map((type, i)=>{
           return(
             <div key={i} className="card">
               <h2>{type}</h2>
               <hr />
               <ul className="list">
+                {/* acessa o array de tasks das propriedades do objeto*/}
                 {tasksByType[type].map((task, j)=>{
                   return(
                         <li key={j}>
