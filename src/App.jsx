@@ -45,6 +45,22 @@ export default function App() {
         const isTypeExist = typeData.some((type) => type.id === savedType.id);
         if (!isTypeExist) {
           setTypeData([...typeData, savedType])
+          const infoTask = {
+            title: taskName, typeId: savedType.id
+          }
+          try {
+            const responseTask = await fetch("http://localhost:3000/tasks", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json"
+            },
+            body: JSON.stringify(infoTask)
+          })
+          const savedTask = await responseTask.json()
+          return savedTask
+          } catch (error) {
+            console.log("Ocorreu um erro ao salvar a taskName");
+          }
         }
 
         } catch (error) {
