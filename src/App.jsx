@@ -80,9 +80,7 @@ export default function App() {
           const isTaskExist = taskData.some((task)=> task.title === infoTask.title) 
           if (!isTaskExist) {
             setTaskData([...taskData, savedTask])
-          } else {
-            alert("Tarefa ja criada")
-          }
+          } 
 
           } catch (error) {
             console.log("Ocorreu um erro ao salvar a task a um tipo recem criado");

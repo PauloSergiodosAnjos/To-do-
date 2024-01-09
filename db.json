@@ -14,6 +14,21 @@
       "title": "Treinar tecnicasa nogi",
       "typeId": 2,
       "id": 3
+    },
+    {
+      "title": "Treinar tecnicasa nogi",
+      "typeId": 2,
+      "id": 4
+    },
+    {
+      "title": "Treinar tecnicasa nogi",
+      "typeId": 2,
+      "id": 5
+    },
+    {
+      "title": "Lavar a casa",
+      "typeId": 1,
+      "id": 6
     }
   ],
   "types": [
