@@ -18,8 +18,43 @@ export default function App() {
   }, [taskData, typeData])
 
   const handleTask = (ev)=> {
+    setTaskName(ev.target.value)
+  }
+
+  const handleType = (ev)=> {
     setTaskType(ev.target.value)
   }
+
+  const saveTask = async (ev)=> {
+    ev.preventDefault()
+    const existingType = typeData.find((type) => type.type === taskType);
+      if (!existingType) {
+        const infoType = {type: taskType}
+
+        try {
+          const responseType = await fetch("http://localhost:3000/types", {
+          method: "POST",
+          headers: {
+              "content-type": "application/json"
+          },
+          body: JSON.stringify(infoType)
+        })
+
+        const savedType = await responseType.json()
+
+        const isTypeExist = typeData.some((type) => type.id === savedType.id);
+        if (!isTypeExist) {
+          setTypeData([...typeData, savedType])
+        }
+
+        } catch (error) {
+          console.log("Ocorreu um erro ao salvar a task");
+        }
+    }
+  
+
+
+}
 
   const fetchTask = async ()=> {
     try {
@@ -56,14 +91,7 @@ export default function App() {
     }
   }
   
-  const handleType = (ev)=> {
-    setTaskName(ev.target.value)
-  }
 
-  const saveTask = (ev)=> {
-    ev.preventDefault()
-    console.log({taskName, taskType});
-  }
 
 
   return(
