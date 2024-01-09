@@ -28,6 +28,25 @@ export default function App() {
   const saveTask = async (ev)=> {
     ev.preventDefault()
     const existingType = typeData.find((type) => type.type === taskType);
+      if (existingType) {
+        const infoTask = {
+          title: taskName, typeId: existingType.id
+        }
+        try {
+          const responseTask = await fetch("http://localhost:3000/tasks", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json"
+            },
+            body: JSON.stringify(infoTask)
+          })
+
+          const savedTask = await responseTask.json()
+          setTaskData([...taskData, savedTask])
+        } catch (error) {
+          console.log("Houve um erro ao salvar a task em um tipo ja existente");
+        }
+      }
       if (!existingType) {
         const infoType = {type: taskType}
 
@@ -42,12 +61,12 @@ export default function App() {
 
         const savedType = await responseType.json()
 
-        const isTypeExist = typeData.some((type) => type.id === savedType.id);
-        if (!isTypeExist) {
           setTypeData([...typeData, savedType])
+
           const infoTask = {
             title: taskName, typeId: savedType.id
           }
+
           try {
             const responseTask = await fetch("http://localhost:3000/tasks", {
             method: "POST",
@@ -57,19 +76,22 @@ export default function App() {
             body: JSON.stringify(infoTask)
           })
           const savedTask = await responseTask.json()
-          return savedTask
-          } catch (error) {
-            console.log("Ocorreu um erro ao salvar a taskName");
+
+          const isTaskExist = taskData.some((task)=> task.title === infoTask.title) 
+          if (!isTaskExist) {
+            setTaskData([...taskData, savedTask])
+          } else {
+            alert("Tarefa ja criada")
           }
-        }
+
+          } catch (error) {
+            console.log("Ocorreu um erro ao salvar a task a um tipo recem criado");
+          }
 
         } catch (error) {
-          console.log("Ocorreu um erro ao salvar a task");
+          console.log("Ocorreu um erro ao salvar a task a um tipo novo");
         }
     }
-  
-
-
 }
 
   const fetchTask = async ()=> {
@@ -106,9 +128,6 @@ export default function App() {
       console.error("Houve um erro ao buscar tasks e types", error);
     }
   }
-  
-
-
 
   return(
     <>
@@ -142,5 +161,3 @@ export default function App() {
     </>
   )
 }
-
-//a fazer: função CRUD e armazenamento local, depois cuida do front
